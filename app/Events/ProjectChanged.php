@@ -2,9 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\Task;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -18,7 +17,7 @@ class ProjectChanged implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(public Task $task)
+    public function __construct(public int $projectId)
     {
     }
 
@@ -29,6 +28,6 @@ class ProjectChanged implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel("App.Models.Project.{$this->task->project_id}");
+        return new PresenceChannel("project-participant.{$this->projectId}");
     }
 }

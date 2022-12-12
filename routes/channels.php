@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.Project.{id}', function ($user, $id) {
-    return (int) $user->id === \App\Models\Project::find((int) $id)->user_id;
+//Broadcast::channel('project-changed.{id}', function ($user, $id) {
+//    return $user->belongToProject($id);
+//});
+Broadcast::channel('project-participant.{id}', function (\App\Models\User $user, $id) {
+    if ($user->belongToProject($id)) {
+        return $user->toArray();
+    }
 });

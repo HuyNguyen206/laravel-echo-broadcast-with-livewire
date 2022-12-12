@@ -18,7 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard/{project?}', function (\App\Models\Project $project) {
+Route::get('/dashboard/{project?}', function (\App\Models\Project $project = null) {
+    if ($project) {
+        abort_if(!auth()->user()->belongToProject($project), 403, 'You not belong to this project');
+    } else {
+        $project = new \App\Models\Project();
+    }
+
     return view('dashboard', compact('project'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 

@@ -41,4 +41,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    public function belongToProject($project)
+    {
+        $id = is_object($project) ? $project->id : $project;
+        return $this->projects()->where('projects.id', (int) $id)->exists();
+    }
 }
